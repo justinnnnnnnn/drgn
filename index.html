@@ -1,23 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Broke ISH</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.17/Tone.js"></script>
+  <title>DRAGON SCREAM</title>
   <link rel="stylesheet" href="style.css"/>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding"
   <style> 
   </style>
 </head>
 <body>
-  <main id='main'></main>
-  
-  <div id="synth">
-    <div id='keyboard'></div>
-    <div id='osc-button'></div>
-    <div id='adsr'></div>
+  <div class="bod">
 
+    
+    <div id="canvas-div">
+      <canvas
+      id="canvas"
+      width="1200"
+      height="820"
+      font-family="Angelwish"
+      />
+    </div>
+    <main id='main'></main>
+    
+    <div class="synth" id="synth">
+      <div id='osc-button'></div>
+      <div id='adsr'></div>
+      <div class='octave'>
+        <div>Octave up</div>
+        <div class="updown">z</div>
+      </div>
+      <div class='octave'> 
+        <div>Octave down</div>  
+        <div class="updown">x</div>
+      </div>
+    </div>
+
+    <div id='keyboard'>
+
+      
+    </div>
+
+    
   </div>
 
-  <script type="application/javascript" src="./goal4c.js"></script>
+  <!-- <script type="application/javascript" src="./goal32oscope.js"></script> -->
+  <script type="application/javascript" src="./goal39.js"></script>
 
 </body>
 </html>

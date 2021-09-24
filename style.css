@@ -1,67 +1,127 @@
-#synth {
+/* @font-face {
+  font-family: AngelWish;
+  src: url('https://www.fontmirror.com/app_public/files/t/1/2020/12/Angel%20wish.otf') format("")
+} */
+@font-face {
+  font-family: 'Angelwish';
+  src: url('resources/font.otf');
+  font-size: larger;
+  /* format('woff'),
+  url('https://demofont.com/wp-content/uploads/2020/09/angelwishregular-rpave.otf') format('truetype'); */
+}
+
+body {
+  font-family: Angelwish;
+  font-size: 24px;
+  letter-spacing: 1.5px;
+  text-shadow: 2px 2px 5px red;
+  color: pink;
+  margin: 0px;
+  background-color: black;
+}
+
+.bod {
+  height: 800px;
+  width: 1200px;
+  z-index: -2;
+}
+
+label {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.synth {
+  /* float: bottom; */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: bottom;
   justify-content: space-evenly;
+  /* justify-self: flex-end; */
+  /* position: relative; */
+  bottom: 0;
+  padding-left: 38px;
+  padding-top: 150px;
 }
+
+.octave {
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  float:left;
+  justify-content: space-between;
+  /* width: 204px; */
+  width: 125px;
+
+}
+.updown {
+  font-family: arial;
+  box-shadow: 3px, 3px, 3px, 3px, teal;
+  z-index: 1;
+  background: black;
+  border: 1px solid rgba(70, 131, 180, 0.062);
+  border-radius: 3px;
+  text-shadow: none;
+  font-size: 18px;
+  width: 14px;
+  padding-left: 4px;
+}
+
 #keyboard {
-      /* position: absolute; */
+  padding-top: 60px;
       height: 80px;
-      border: 5px solid black;
-      top: calc(50% -100px);
-      left: calc(50% -350px);
-      /* overflow: hidden; */
+      display: flex;
+      justify-content: center;
+      text-shadow: none;
+      color:rgb(0, 0, 0);
+      /* top: calc(50% -100px);
+      left: calc(50% -350px); */
     }
           
     .whiteNote {
       position: relative;
       height: 100%; 
       width:80px;
-      background:gold;
+      background:rgba(87, 102, 98, 0.5);
       float: left;
-      border: 1px solid black;
+      border: 1px solid gold;
       border-radius: 50%;
+      padding-top: 6px;
+      margin: 3px;
     }
     .blackNote {
       position: absolute;
       border: 1px solid yellow;
-      float: top;
+      float: bottom;
       height: 65%;
       width: 65%;
       z-index: 1;
-      background: silver;
-      border-radius: 50%;
+      background: rgb(57, 51, 71);
+      border-radius: 70%;
       left: 70%;
     }
 
     .whiteNote > div {
-      /* position:absolute; */
-      /* width: 100%; */
       text-align: center;
-      align-items: center;
     }
     
     .blackNote > div {
-      /* position:absolute; */
-      /* width: 100%; */
       text-align: center;
       align-items: center;
-    }
-
-#osc-button {
-  height: 50px;
-  width: 50px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  position: relative;
-  background-color: greenyellow;
 }
+
 
 #waveform-slider {
   height: inherit;
+  width: 350px;
 }
+
+#adsr {
+  text-align: right;
+  width: 350px;
+}
+
 #waveform-slider-input {
   height: inherit;
   border: 1px solid black;
@@ -72,4 +132,18 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+}
+
+
+canvas {
+  position: absolute;
+  background: #f8f8f8;
+  padding: 0;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  display: block;
+  font-family: Angelwish;
+  font-size: 24px;
+  letter-spacing: 1.5px;
+  z-index: -1;
 }
