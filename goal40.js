@@ -235,9 +235,11 @@ document.addEventListener("keydown", (e) => {
       break;
     case "z":
       OCTAVE--
+      octatePress("down")
       break;
     case "x":
       OCTAVE++
+      octatePress("up")
       break;
     case "m":
       disconnectAll()
@@ -319,6 +321,11 @@ document.addEventListener("keyup", (e) => {
         pressedKeys[";"].on = false;
         unplayKey(`${"E" + (OCTAVE + 1)}`, ";");
         break;
+      case "z":
+        octateRelease("down")
+        break
+      case "x":
+        octateRelease("up")
     default:
       break;
   }
@@ -336,6 +343,12 @@ function unplayKey(_, key) {
     COUNT = 0
   }
 };
+function octatePress(dir) {
+  document.getElementById(`${dir}`).style.backgroundColor = "rgba(152, 55, 96, 0.7)"
+}
+function octateRelease(dir) {
+  document.getElementById(`${dir}`).style.backgroundColor = ""
+}
 
 var pressedKeys = {
   "a": {on: false, pressTime: "", clearTime: Date.now(), id: ""},  //c
@@ -383,7 +396,6 @@ function deleteOscs() {
       delete amplifier[key];
     }
   });
-
 }
 
 //Web Audio Context
@@ -686,22 +698,7 @@ dataArray = new Uint8Array(bufferLength);
 const HEIGHT = canvas.height
 const WIDTH = canvas.width
 
-function draw() {
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  analyser.getByteTimeDomainData(dataArray)
-  analyser.getByteFrequencyData(the_freqs);
-
-  ctx.font = '84px Angelwish';
-  const avg = [...Array(255).keys()].reduce((acc, curr) => acc + the_freqs[curr], 0) / 200;
-  ctx.fillStyle = `rgba(${10 + avg}, ${80 - avg}, ${255}, ${1})`;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "top";
-
-  ctx.fillText("Dragon Scream", 220, 20);
-  ctx.fillText("", canvas.width / 2, canvas.height / 2 + 6);
-  var img   = new Image(100, 100);  
+var img   = new Image(100, 100);  
   var img2  = new Image(200, 200); 
   var img3  = new Image(200, 200); 
   var img4  = new Image(200, 200); 
@@ -724,6 +721,24 @@ function draw() {
   img10.src = 'resources/aboutface.png'
 
   img.globalCompositeOperation='destination-over'
+
+function draw() {
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  analyser.getByteTimeDomainData(dataArray)
+  analyser.getByteFrequencyData(the_freqs);
+
+  ctx.font = '84px Angelwish';
+  const avg = [...Array(255).keys()].reduce((acc, curr) => acc + the_freqs[curr], 0) / 200;
+  ctx.fillStyle = `rgba(${10 + avg}, ${80 - avg}, ${255}, ${1})`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+
+  ctx.fillText("Dragon Scream", 220, 20);
+  ctx.fillText("", canvas.width / 2, canvas.height / 2 + 6);
+  
+  
   ctx.drawImage(img, 480, 10)
   
   ctx.drawImage(img8, 403, 543) 
@@ -736,33 +751,31 @@ function draw() {
   ctx.drawImage(img7, 555, 541) 
   ctx.drawImage(img3, 565, 554) 
 
-  img.onload = drawImageActualSize
-  img.onload = function() {
-  };
-  img.addEventListener('load', function() {
-    ctx.drawImage(img, 0, 0)
-    ctx.drawImage(img2, 0, 0)
-    ctx.drawImage(img3, 0, 0)
-    ctx.drawImage(img4, 0, 0)
-    ctx.drawImage(img5, 0, 0)
-    ctx.drawImage(img6, 0, 0)
-    ctx.drawImage(img7, 0, 0)
-    ctx.drawImage(img8, 0, 0)
-    ctx.drawImage(img9, 0, 0)
-    ctx.drawImage(img10, 0, 0)
-  }, false);
+  // img.onload = drawImageActualSize
+  // img.onload = function() {
+  // };
+  // img.addEventListener('load', function() {
+  //   ctx.drawImage(img, 0, 0)
+  //   ctx.drawImage(img2, 0, 0)
+  //   ctx.drawImage(img3, 0, 0)
+  //   ctx.drawImage(img4, 0, 0)
+  //   ctx.drawImage(img5, 0, 0)
+  //   ctx.drawImage(img6, 0, 0)
+  //   ctx.drawImage(img7, 0, 0)
+  //   ctx.drawImage(img8, 0, 0)
+  //   ctx.drawImage(img9, 0, 0)
+  //   ctx.drawImage(img10, 0, 0)
+  // }, false);
 
-  function drawImageActualSize() {
-    canvas.width = this.naturalWidth;
-    canvas.height = this.naturalHeight;
-    ctx.drawImage(this, 0, 0);
-  }
+  // function drawImageActualSize() {
+  //   canvas.width = this.naturalWidth;
+  //   canvas.height = this.naturalHeight;
+  //   ctx.drawImage(this, 0, 0);
+  // }
 
   ctx.lineCap = 'round'
   
-  analyser.getByteTimeDomainData(dataArray)
   var bars = 5;
- 
   function oscope(i = 0, bar_height = 0) {
     let plusMinus;
     i % 2 === 0 ? plusMinus = i : plusMinus = -i;
@@ -786,7 +799,6 @@ function draw() {
     }
   }
 
-  ctx.stroke();
   let radius = 1;
   let zap_color =`rgba(${150}, ${(100)}, ${100}, ${0.556})`;
   
@@ -828,11 +840,9 @@ function draw() {
     let x_end =
       (canvas.width) * i / 50 + Math.cos(1001 * radians * i) * (radius + bar_height / (i));
     let y_end = -60;
-      // canvas.height * i / 255 + Math.sin(radians * i) * (radius + bar_height - i);
     let splash_color =`rgba(${(i + the_freqs[i])}, ${(i + the_freqs[i])/i}, ${the_freqs[i]*2}, ${0.0001 * i*2})`;
     ctx.strokeStyle = splash_color;
     ctx.lineWidth = 250 - i;
-    // / i;
     ctx.beginPath();
     ctx.moveTo(x - 20, y);
     ctx.lineTo(x_end - 100 + i, y_end);
@@ -841,5 +851,5 @@ function draw() {
 
   requestAnimationFrame(draw);
 }
-
+// draw()
 requestAnimationFrame(draw);
