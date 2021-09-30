@@ -9,9 +9,13 @@
   </style>
 </head>
 <body>
+  
   <div class="bod">
-
-      <div id="canvas-div">
+    <div id="canvas-div">
+        <div id="modal-buttons">
+          <div class="modal" id="docs">How to</div>
+          <div class="modal" id="about">About</div>
+        </div>
         <canvas
         id="canvas"
         width="1200"
@@ -19,31 +23,29 @@
         font-family="Angelwish"
         />
       </div>
-    <main id='main'></main>
     
     <div class="synth" id="synth">
       <div id='osc-button'></div>
       <div id='adsr'></div>
       <div class='octave'>
-        <div>Octave up</div>
-        <div class="updown" id="up">x</div>
+        <div class=font-control>Octave up</div>
+        <div id="up" class="updown">x</div>
       </div>
+      
       <div class='octave'> 
-        <div>Octave down</div>  
+        <div class="font-control">Octave down</div>  
         <div id="down" class="updown">z</div>
       </div>
     </div>
 
     <div id='keyboard'>
-
-      
     </div>
 
     
   </div>
-
-  <!-- <script type="application/javascript" src="./goal32oscope.js"></script> -->
-  <script type="application/javascript" src="./goal40.js"></script>
+  <div id='modal'></div>
+  <script type="application/javascript" src="./goal45.js"></script>
+  <!-- <script type="application/javascript" src="./teststuff.js"></script> -->
 
 </body>
 </html>

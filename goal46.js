@@ -1,11 +1,11 @@
-var THE_FONT = new FontFace('Angelwish', 'url(Angelwish.otf)')
-THE_FONT.load().then(function(Angelwish) {
-	document.fonts.add(Angelwish);
-  document.body.style.fontFamily = 'Angelwish';
-}).catch(function(error) {
+var THE_FONT = new FontFace('Angelwish', 'url(resources/font.otf)')
+  THE_FONT.load().then(function(Angelwish) {
+	  document.fonts.add(Angelwish);
+    document.body.style.fontFamily = 'Angelwish';
+  }).catch(function(error) {
 });
 
-COUNT = 0;
+COUNT = 0; //reset osc count
 // Notes: Frequency
 const NOTE_FREQS = {         
   "C0":  16.35,
@@ -116,10 +116,14 @@ const NOTE_FREQS = {
   "A8":  7040.00,
   "A#8": 7458.62,
   "B8":  7902.13,
+  "C9":  8345.64,
+  "C#9": 8789.15,
+  "D9":  9232.66,
+  "D#9": 9676.17,
+  "E9": 10119.68
 }
 //Keyboard
   const keyboardKeyWhite = ["a<br>C", "s<br>D", "d<br>E", "f<br>F", "g<br>G", "h<br>A", "j<br>B", "k<br>C", "l<br>D", ";<br>E"]
-//Keyboard
   const keyboardKeyWhite2 = ["a<br>C", "s<br>D", "d<br>E", "f<br>F", "g<br>G", "h<br>A", "j<br>B", "k<br>C", "l<br>D", ";<br>E"]
   const keyboardKeyBlack = ["w<br>C#", "e<br>Db", "t<br>Eb", "y<br>F#", "u<br>G#", "o<br>C#", "p<br>Eb"];
   const keyboardKeyBlack2 = ["w<br>C#", "e<br>Db", "t<br>Eb", "y<br>F#", "u<br>G#", "o<br>C#", "p<br>Eb"];
@@ -139,7 +143,7 @@ const NOTE_FREQS = {
           class='whiteNote' 
           data-note='${note}'
         >
-        <div>${keyboardKeyWhite.shift()}</div>`; //access note key-value
+        <div class="font-control" id="${i}-white">${keyboardKeyWhite.shift()}</div>`; //access note key-value
 
         if (hasSharp) {
           htmlNotes += 
@@ -148,7 +152,7 @@ const NOTE_FREQS = {
             class='blackNote'
             data-note='${note + "#" + (oct + 1)}'
             >
-              <div>${keyboardKeyBlack.shift()}
+              <div class="font-control" id="${i}-black">${keyboardKeyBlack.shift()}
               </div>
           </div>`; //access note key-value
         }
@@ -164,9 +168,11 @@ const NOTE_FREQS = {
 // END KEYBOARD
 
 document.addEventListener("keydown", (e) => {
+  console.log("octave", OCTAVE)
   switch (e.key) {
     case "a":
-      playKey(`${"C" + OCTAVE}`, "a")
+      console.log("a pressed");
+      playKey(`${"C" + OCTAVE}`, "a");
       pressedKeys["a"].on = true;
       break;
     case "w":
@@ -234,12 +240,16 @@ document.addEventListener("keydown", (e) => {
         pressedKeys[";"].on = true
       break;
     case "z":
-      OCTAVE--
-      octatePress("down")
+      if (OCTAVE > 0) {
+        OCTAVE--
+        octatePress("down")
+      }
       break;
     case "x":
-      OCTAVE++
-      octatePress("up")
+      if (OCTAVE < 8) {
+        OCTAVE++
+        octatePress("up")
+      }
       break;
     case "m":
       disconnectAll()
@@ -349,7 +359,6 @@ function octatePress(dir) {
 function octateRelease(dir) {
   document.getElementById(`${dir}`).style.backgroundColor = ""
 }
-
 var pressedKeys = {
   "a": {on: false, pressTime: "", clearTime: Date.now(), id: ""},  //c
   "w": {on: false, pressTime: "", clearTime: Date.now(), id: ""},  //c#
@@ -369,6 +378,211 @@ var pressedKeys = {
   "l": {on: false, pressTime: "", clearTime: Date.now(), id: ""},  //e
   ";": {on: false, pressTime: "", clearTime: Date.now(), id: ""},  //e
 };
+// let mouseNotes = {}
+// const notesToPress = Object.keys(pressedKeys);
+// notesToPress.forEach(ele =>
+//   mouseNotes[ele] = document.getElementById(ele)
+// )
+
+const note_a = document.getElementById("a")
+const note_w = document.getElementById("w")
+const note_s = document.getElementById("s")
+const note_e = document.getElementById("e")
+const note_d = document.getElementById("d")
+const note_f = document.getElementById("f")
+const note_t = document.getElementById("t")
+const note_g = document.getElementById("g")
+const note_y = document.getElementById("y")
+const note_h = document.getElementById("h")
+const note_u = document.getElementById("u")
+const note_j = document.getElementById("j")
+const note_k = document.getElementById("k")
+const note_o = document.getElementById("o")
+const note_l = document.getElementById("l")
+const note_p = document.getElementById("p")
+const note_semicolon = document.getElementById(`;`)
+const octave_z = document.getElementById("up")
+const octave_x = document.getElementById("down")
+
+function mouseWhiteNote (e, assocKey, idNum) {
+  e.preventDefault();
+  if (e.target === document.getElementById(`${idNum}-black`)) return;
+  if (e.type === 'mousedown') {
+    document.dispatchEvent(new KeyboardEvent('keydown',{'key': assocKey}));
+  } else {
+    document.dispatchEvent(new KeyboardEvent('keyup',{'key': assocKey}));
+  }
+}
+function mouseBlackNote (e, assocKey, idNum) {
+  e.preventDefault();
+  if (e.type === 'mousedown') {
+    document.dispatchEvent(new KeyboardEvent('keydown',{'key': assocKey}));
+  } else {
+    document.dispatchEvent(new KeyboardEvent('keyup',{'key': assocKey}));
+  }
+}
+function octaveDownPress(e) {e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{'key': "x"}))}
+function octaveDownRelease(e) {e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keyup',{'key': "x"}))}
+function octaveUpPress(e) {e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{'key': "z"}))} 
+function octaveUpRelease(e) {e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keyup',{'key': "z"}))} 
+octave_x.addEventListener       ('mousedown', octaveUpPress)
+octave_x.addEventListener       ('mouseup', octaveUpRelease)
+octave_z.addEventListener       ('mousedown', octaveDownPress)
+octave_z.addEventListener       ('mouseup', octaveDownRelease)
+
+
+note_a.addEventListener         ('mousedown', function(e){mouseWhiteNote(e, "a", 0)})
+note_w.addEventListener         ('mousedown', function(e){mouseBlackNote(e, "w", 0)})
+note_s.addEventListener         ('mousedown', function(e){mouseWhiteNote(e, "s", 1)})
+note_e.addEventListener         ('mousedown', function(e){mouseBlackNote(e, "e", 1)})
+note_d.addEventListener         ('mousedown', function(e){mouseWhiteNote(e, "d", 2)})
+note_f.addEventListener         ('mousedown', function(e){mouseWhiteNote(e, "f", 3)})
+note_t.addEventListener         ('mousedown', function(e){mouseBlackNote(e, "t", 3)})
+note_g.addEventListener         ('mousedown', function(e){mouseWhiteNote(e, "g", 4)})
+note_y.addEventListener         ('mousedown', function(e){mouseBlackNote(e, "y", 4)})
+note_h.addEventListener         ('mousedown', function(e){mouseWhiteNote(e, "h", 5)})
+note_u.addEventListener         ('mousedown', function(e){mouseBlackNote(e, "u", 5)})
+note_j.addEventListener         ('mousedown', function(e){mouseWhiteNote(e, "j", 6)})
+note_k.addEventListener         ('mousedown', function(e){mouseWhiteNote(e, "k", 7)})
+note_o.addEventListener         ('mousedown', function(e){mouseBlackNote(e, "o", 7)})
+note_l.addEventListener         ('mousedown', function(e){mouseWhiteNote(e, "l", 8)})
+note_p.addEventListener         ('mousedown', function(e){mouseBlackNote(e, "p", 8)})
+note_semicolon.addEventListener ('mousedown', function(e){mouseWhiteNote(e, `;`, 9)})
+note_a.addEventListener         ('mouseup', function(e){mouseWhiteNote(e, "a", 0)})
+note_w.addEventListener         ('mouseup', function(e){mouseBlackNote(e, "w", 0)})
+note_s.addEventListener         ('mouseup', function(e){mouseWhiteNote(e, "s", 1)})
+note_e.addEventListener         ('mouseup', function(e){mouseBlackNote(e, "e", 1)})
+note_d.addEventListener         ('mouseup', function(e){mouseWhiteNote(e, "d", 2)})
+note_f.addEventListener         ('mouseup', function(e){mouseWhiteNote(e, "f", 3)})
+note_t.addEventListener         ('mouseup', function(e){mouseBlackNote(e, "t", 3)})
+note_g.addEventListener         ('mouseup', function(e){mouseWhiteNote(e, "g", 4)})
+note_y.addEventListener         ('mouseup', function(e){mouseBlackNote(e, "y", 4)})
+note_h.addEventListener         ('mouseup', function(e){mouseWhiteNote(e, "h", 5)})
+note_u.addEventListener         ('mouseup', function(e){mouseBlackNote(e, "u", 5)})
+note_j.addEventListener         ('mouseup', function(e){mouseWhiteNote(e, "j", 6)})
+note_k.addEventListener         ('mouseup', function(e){mouseWhiteNote(e, "k", 7)})
+note_o.addEventListener         ('mouseup', function(e){mouseBlackNote(e, "o", 7)})
+note_l.addEventListener         ('mouseup', function(e){mouseWhiteNote(e, "l", 8)})
+note_p.addEventListener         ('mouseup', function(e){mouseBlackNote(e, "p", 8)})
+note_semicolon.addEventListener ('mouseup', function(e){mouseWhiteNote(e, `;`, 9)})
+note_a.addEventListener         ('mouseleave', function(e){mouseWhiteNote(e, "a", 0)})
+note_w.addEventListener         ('mouseleave', function(e){mouseBlackNote(e, "w", 0)})
+note_s.addEventListener         ('mouseleave', function(e){mouseWhiteNote(e, "s", 1)})
+note_e.addEventListener         ('mouseleave', function(e){mouseBlackNote(e, "e", 1)})
+note_d.addEventListener         ('mouseleave', function(e){mouseWhiteNote(e, "d", 2)})
+note_f.addEventListener         ('mouseleave', function(e){mouseWhiteNote(e, "f", 3)})
+note_t.addEventListener         ('mouseleave', function(e){mouseBlackNote(e, "t", 3)})
+note_g.addEventListener         ('mouseleave', function(e){mouseWhiteNote(e, "g", 4)})
+note_y.addEventListener         ('mouseleave', function(e){mouseBlackNote(e, "y", 4)})
+note_h.addEventListener         ('mouseleave', function(e){mouseWhiteNote(e, "h", 5)})
+note_u.addEventListener         ('mouseleave', function(e){mouseBlackNote(e, "u", 5)})
+note_j.addEventListener         ('mouseleave', function(e){mouseWhiteNote(e, "j", 6)})
+note_k.addEventListener         ('mouseleave', function(e){mouseWhiteNote(e, "k", 7)})
+note_o.addEventListener         ('mouseleave', function(e){mouseBlackNote(e, "o", 7)})
+note_l.addEventListener         ('mouseleave', function(e){mouseWhiteNote(e, "l", 8)})
+note_p.addEventListener         ('mouseleave', function(e){mouseBlackNote(e, "p", 8)})
+note_semicolon.addEventListener ('mouseleave', function(e){mouseWhiteNote(e, `;`, 9)})
+
+function touchWhiteNote (e, assocKey, idNum) {
+  e.preventDefault();
+  if (e.target === document.getElementById(`${idNum}-black`)) return;
+  if (e.type === 'touchstart') {
+    document.dispatchEvent(new KeyboardEvent('keydown',{'key': assocKey}));
+  } else {
+    document.dispatchEvent(new KeyboardEvent('keyup',{'key': assocKey}));
+  }
+}
+function touchBlackNote (e, assocKey, idNum) {
+  e.preventDefault();
+  if (e.type === 'touchstart') {
+    document.dispatchEvent(new KeyboardEvent('keydown',{'key': assocKey}));
+  } else {
+    document.dispatchEvent(new KeyboardEvent('keyup',{'key': assocKey}));
+  }
+}
+note_a.addEventListener         ('touchstart', (e) => {e.preventDefault();console.log("touching you"); touchWhiteNote(e, "a", 0)})
+note_w.addEventListener         ('touchstart', function(e){e.preventDefault(); touchBlackNote(e, "w", 0)})
+note_s.addEventListener         ('touchstart', function(e){touchWhiteNote(e, "s", 1)})
+note_e.addEventListener         ('touchstart', function(e){touchBlackNote(e, "e", 1)})
+note_d.addEventListener         ('touchstart', function(e){touchWhiteNote(e, "d", 2)})
+note_f.addEventListener         ('touchstart', function(e){touchWhiteNote(e, "f", 3)})
+note_t.addEventListener         ('touchstart', function(e){touchBlackNote(e, "t", 3)})
+note_g.addEventListener         ('touchstart', function(e){touchWhiteNote(e, "g", 4)})
+note_y.addEventListener         ('touchstart', function(e){touchBlackNote(e, "y", 4)})
+note_h.addEventListener         ('touchstart', function(e){touchWhiteNote(e, "h", 5)})
+note_u.addEventListener         ('touchstart', function(e){touchBlackNote(e, "u", 5)})
+note_j.addEventListener         ('touchstart', function(e){touchWhiteNote(e, "j", 6)})
+note_k.addEventListener         ('touchstart', function(e){touchWhiteNote(e, "k", 7)})
+note_o.addEventListener         ('touchstart', function(e){touchBlackNote(e, "o", 7)})
+note_l.addEventListener         ('touchstart', function(e){touchWhiteNote(e, "l", 8)})
+note_p.addEventListener         ('touchstart', function(e){touchBlackNote(e, "p", 8)})
+note_semicolon.addEventListener ('touchstart', function(e){touchWhiteNote(e, `;`, 9)})
+note_a.addEventListener         ('touchend', (e) => {e.preventDefault(); console.log("touching me"); touchWhiteNote(e, "a", 0)})
+note_w.addEventListener         ('touchend', function(e){touchBlackNote(e, "w", 0)})
+note_s.addEventListener         ('touchend', function(e){touchWhiteNote(e, "s", 1)})
+note_e.addEventListener         ('touchend', function(e){touchBlackNote(e, "e", 1)})
+note_d.addEventListener         ('touchend', function(e){touchWhiteNote(e, "d", 2)})
+note_f.addEventListener         ('touchend', function(e){touchWhiteNote(e, "f", 3)})
+note_t.addEventListener         ('touchend', function(e){touchBlackNote(e, "t", 3)})
+note_g.addEventListener         ('touchend', function(e){touchWhiteNote(e, "g", 4)})
+note_y.addEventListener         ('touchend', function(e){touchBlackNote(e, "y", 4)})
+note_h.addEventListener         ('touchend', function(e){touchWhiteNote(e, "h", 5)})
+note_u.addEventListener         ('touchend', function(e){touchBlackNote(e, "u", 5)})
+note_j.addEventListener         ('touchend', function(e){touchWhiteNote(e, "j", 6)})
+note_k.addEventListener         ('touchend', function(e){touchWhiteNote(e, "k", 7)})
+note_o.addEventListener         ('touchend', function(e){touchBlackNote(e, "o", 7)})
+note_l.addEventListener         ('touchend', function(e){touchWhiteNote(e, "l", 8)})
+note_p.addEventListener         ('touchend', function(e){touchBlackNote(e, "p", 8)})
+note_semicolon.addEventListener ('touchend', function(e){touchWhiteNote(e, `;`, 9)})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// touch.addEventListener("mousedown", pressingDown, false);
+// touch.addEventListener("mouseup", notPressingDown, false);
+// touch.addEventListener("mouseleave", notPressingDown, false);
+
+// touch.addEventListener("touchstart", pressingDown, false);
+// touch.addEventListener("touchend", notPressingDown, false);
+// // touch.addEventListener("pressHold", doSomething, false); //maybe redundant
+function pressingDown(e) {
+  e.preventDefault();
+  console.log("e", e)
+  // document.getElementsByClassName(e).style.backgroundColor = "white"
+}
+// function notPressingDown(e) {
+//   document.getElementsByClassName("whiteNote").style.backgroundColor = ""
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //Sliders
@@ -409,7 +623,6 @@ var filter2 = audioContext.createBiquadFilter();
 var delay = audioContext.createDelay();
   delay.delayTime.value = 0;
 var distortion = audioContext.createWaveShaper();
-  // distortion.curve = Float32Array.from([-0.5, 0.6, 0, -0.6, 0.5])
   distortion.curve = Float32Array.from([0, 0]);
 var compressor = audioContext.createDynamicsCompressor();
   compressor.knee = 30;
@@ -450,7 +663,9 @@ filter2.connect(compressor);
 compressor.connect(amplifier.mixBus);
 
 //Waveform Selector
-var waveformSlider = `<div id="waveform-slider"><label>Waveform
+var waveformSlider = `<div id="waveform-slider"><label><div class="font-control">
+Waveform 
+</div>
   <input type="range" min="0" max="3" step="1" value="0" id="waveform-slider-input" onchange="updateWaveformSlider(this.value)">
   </label>
   </div>`;
@@ -465,46 +680,46 @@ var sliderValue = document.querySelector("#waveform-slider-input[value]").value;
 
 // SLIDER CONTROL
 const adsrSlider = `<div class="sliders" id="adsr">
-  <label>Attack
+  <label><div class="font-control">Attack</div>
     <input type="range" min="1" max="120" step="1" value="1" id="adsr-a" onchange="updateAttackSlider(this.value)">
   </label>
-  <label>Decay
+  <label><div class="font-control">Decay</div>
     <input type="range" min="1" max="120" step="1" value="1" id="adsr-d" onchange="updateDecaySlider(this.value)">
   </label>
-  <label>Sustain
+  <label><div class="font-control">Sustain</div>
     <input type="range" min="0" max="1" step="0.1" value="1" id="adsr-s" onchange="updateSustainSlider(this.value)">
   </label>
-  <label>Release
+  <label><div class="font-control">Release</div>
     <input type="range" min="1" max="120" step="1" value="1" id="adsr-r" onchange="updateReleaseSlider(this.value)">
   </label>
-  <label>FM
+  <label><div class="font-control">FM</div>
     <input type="range" min="1" max="120" step="1" value="1" id="FM" onchange="updateFM(this.value)">
   </label>
-  <label>Pre-Filter
+  <label><div class="font-control">Pre-Filter</div>
     <input type="range" min="1" max="120" step="1" value="120" id="filter" onchange="updateFilter(this.value)">
   </label>
-  <label>Pre-Filter Q
+  <label><div class="font-control">Pre-Filter Q</div>
     <input type="range" min="1" max="120" step="1" value="10" id="filterQ" onchange="updateFilterQ(this.value)">
   </label>
-  <label>Post-Filter
+  <label><div class="font-control">Post-Filter</div>
     <input type="range" min="1" max="120" step="1" value="120" id="filter2" onchange="updateFilter2(this.value)">
   </label>
-  <label>Post-Filter Q
+  <label><div class="font-control">Post-Filter Q</div>
     <input type="range" min="1" max="120" step="1" value="10" id="filterQ2" onchange="updateFilterQ2(this.value)">
   </label>
-  <label>Delay Time
+  <label><div class="font-control">Delay Time</div>
     <input type="range" min="1" max="120" step="1" value="1" id="delayTime" onchange="updateDelayTime(this.value)">
   </label>
-  <label>Delay Feedback
+  <label><div class="font-control">Delay Feedback</div>
     <input type="range" min="1" max="120" step="1" value="1" id="delayFeedback" onchange="updateDelayFeedback(this.value)">
   </label>
-  <label>Detune
+  <label><div class="font-control">Detune</div>
     <input type="range" min="0" max="0.02973" step="0.00003" value="0" id="detune" onchange="updateDetune(this.value)">
   </label>
-  <label>Distortion Gain
+  <label><div class="font-control">Distortion Gain</div>
     <input type="range" min="1" max="120" step="1" value="1" id="distortion" onchange="updateDistortion(this.value)">
   </label>
-  <label>Distortion Wave
+  <label><div class="font-control">Distortion Wave</div>
     <input type="range" min="0" max="1" step="0.01" value="0" id="distortionWave" onchange="updateDistortionWave(this.value)">
   </label>
 </div>`;
@@ -683,9 +898,99 @@ const noteRelease = (key) => {
 }
 
 
+//********************** END SYNTH */
+
+const header = () => {
+
+}
 
 
 
+const modalFAQ =
+    `<div id="modal">
+      <div id="modal-screen"></div>
+      <div class="modal-content">
+        <div><h3>Documentation</h3></div>
+        <div id="param-documentation">
+          <div><b>Dragon Scream</b> is a keyboard synthesizer. Play notes with the corresponding listed keyboard keys. For example, you can play a C-major chord by pressing a, d, and g. Or a C-minor chord with a, e, and g. To play higher and lower notes, change octaves up and down with x and z.</div>
+          <div style="margin-bottom:6px;"><h4>Adjust parameters to change the sound:</h4></div>
+          <div><b>Waveform</b> is the root sound of the oscillator: the positions are Sine, Triangle, Saw, and Square.</div>
+          <div><b>Attack</b> changes how long the note takes to go from no sound to full sound. A leftmost slider will start the sound at full volume and a rightmost position will swell the sound slowly.</div>
+          <div><b>Decay</b> changes the time between the full volume at the end of the attack, and the volume level of the sustain.</div>
+          <div><b>Sustain</b> is the volume level after the decay, while the notes are still being pressed or "sustained".</div>
+          <div><b>Release</b> is the amount of time the note will fade out after the decay and letting go of notes. Left is instant, right is a seconds long slow release like a bell.</div>
+          <div><b>FM</b> is actually amplitude modulation in this case, but yolo. This brightens and saturates the sound by adding waves to the waves.</div>
+          <div><b>Pre-Filter</b> is a 12dB/octave lo-pass filter. Use this to cut the high frequencies before sending the signal to the delay, distortion, and final mixbus for further processing.</div>
+          <div><b>Filter Q</b>s are volume boosts that target the cutoff point of the filter. This creates resonance at the highest frequency before the filtered frequencies.</div>
+          <div><b>Post-Filter</b> is the same as the pre-filter except it happens last in the signal-flow. This filters the total aggregate sound.</div>
+          <div><b>Delay Time</b> adds an echo effect, from none, to very short, to long interspersed echoes. Use a very short time with a long feedback to create a reverberation effect.</div>
+          <div><b>Delay Feedback</b> controls how many echoes the delay echoes before it don't echo no more.</div>
+          <div><b>Detune</b> instantiates two additional oscillators that are the same frequency at the leftmost postion, to a quarter-tone divergent each, up and down at a rightmost position. Use it to "widen" the sound, as a chorusing effect or even a Reese-bass.</div>
+          <div><b>Distortion Gain</b> is the volume level of the side-chained distortion effect. Requires the Distortion Wave parameter.</div>
+          <div><b>Distortion Wave</b> controls how much wave shaping the distortion bus distorts. More = Trogdorian.</div>
+          <div><b>Octave up</b> allows you to play higher notes</div>
+          <div><b>Octave down</b> allows you to play lower notes.</div>
+        </div>
+      </div>
+    </div>`;
+modalFAQopen = true;
+modalFAQopen ? 
+document.getElementById("modal").innerHTML = modalFAQ 
+: document.getElementById("modal").innerHTML = null;
+
+const modalAbout =
+    `<div id="modal">
+      <div id="modal-screen"></div>
+      <div class="modal-content">
+        <div id="personal-info">
+          <div><b>Justin Cheasty</b> makes dragons scream.</div>
+          <span>
+            <a href="https://github.com/justinnnnnnnn/drgn">Github</a> | 
+            <a href="https://www.linkedin.com/in/justin-cheasty-2a521a14/">LinkdIn</a>
+          </span>
+        </div>
+      </div>
+    </div>`;
+modalFAQopen = false;
+const toggleModalFAQ = () => {
+  modalFAQopen ? 
+  document.getElementById("modal").innerHTML = modalFAQ
+  : document.getElementById("modal").innerHTML = null;
+}
+toggleModalFAQ()
+
+modalAboutOpen = false;
+const toggleModalAbout = () => {
+  modalAboutOpen ? 
+  document.getElementById("modal").innerHTML = modalAbout
+  : document.getElementById("modal").innerHTML = null;
+}
+toggleModalAbout()
+
+document.getElementById('docs').onclick = function openModal() {
+  modalFAQopen = true
+  toggleModalFAQ()
+  document.getElementById('modal-screen').onclick = function closeModal() {
+    modalFAQopen = false;
+    modalAboutOpen = false;
+    toggleModalFAQ();
+  }
+}
+document.getElementById('about').onclick = function openModal() {
+  modalAboutOpen = true
+  toggleModalAbout()
+  document.getElementById('modal-screen').onclick = function closeModal() {
+    modalFAQopen = false;
+    modalAboutOpen = false;
+    toggleModalAbout();
+  }
+}
+
+
+
+
+
+//********************** BEGIN VISUALS */
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const analyser = audioContext.createAnalyser();
@@ -750,28 +1055,6 @@ function draw() {
   ctx.drawImage(img10,538, 542) 
   ctx.drawImage(img7, 555, 541) 
   ctx.drawImage(img3, 565, 554) 
-
-  // img.onload = drawImageActualSize
-  // img.onload = function() {
-  // };
-  // img.addEventListener('load', function() {
-  //   ctx.drawImage(img, 0, 0)
-  //   ctx.drawImage(img2, 0, 0)
-  //   ctx.drawImage(img3, 0, 0)
-  //   ctx.drawImage(img4, 0, 0)
-  //   ctx.drawImage(img5, 0, 0)
-  //   ctx.drawImage(img6, 0, 0)
-  //   ctx.drawImage(img7, 0, 0)
-  //   ctx.drawImage(img8, 0, 0)
-  //   ctx.drawImage(img9, 0, 0)
-  //   ctx.drawImage(img10, 0, 0)
-  // }, false);
-
-  // function drawImageActualSize() {
-  //   canvas.width = this.naturalWidth;
-  //   canvas.height = this.naturalHeight;
-  //   ctx.drawImage(this, 0, 0);
-  // }
 
   ctx.lineCap = 'round'
   

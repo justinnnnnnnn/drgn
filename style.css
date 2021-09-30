@@ -21,15 +21,135 @@ body {
 }
 
 .bod {
-  height: 800px;
+  height: 820px;
   width: 1200px;
+  align-items: center;
+}
+
+canvas {
+  position: absolute;
+  background: #f8f8f8;
+  padding: 0;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  display: block;
+  font-family: Angelwish;
+  font-size: 24px;
+  letter-spacing: 1.5px;
   z-index: -2;
 }
+
+
+#modal-buttons {
+  z-index: 36;
+  position: absolute;
+  margin-top: 38px;
+  width: 90px;
+  left: 1040px;
+}
+
+.modal {
+  color: pink;
+  text-shadow: none;
+  /* justify-content: right; */
+  transition: color 0.01s;
+}
+
+.modal:hover {
+  color: rgb(99, 126, 250);
+  /* color: rgb(255, 0, 128); */
+  cursor: pointer;
+}
+
+#modal {
+  color: rgb(245, 207, 226);
+  text-shadow: none;
+}
+
+#modal-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  background: rgba(235, 200, 220, 0.7);
+}
+
+.modal-content {
+  box-shadow: 0px 0px -20px -2px rgb(109, 42, 21);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  z-index: 5;
+  top: 30px;
+  left: 50%;
+  height: 611px;
+  width: 550px;
+  padding: 20px;
+  transform: translateX(-50%);
+  background: black;
+  border-radius: 10px;
+  padding: 12px, 12px, 12px, 12px;
+}
+
+#param-documentation {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: justify;
+    text-justify: distribute;
+    word-spacing: -0.05em;
+    line-height: 2;
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 2em;
+    text-indent: -2em;
+    overflow: scroll;
+  }
+#personal-info {
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    text-align: center;
+    word-spacing: -0.05em;
+    line-height: 2;
+    /* font-size: 14px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 22%;
+  }
+
+  a {
+    color:rgb(96, 109, 255);
+    text-decoration: none;
+    font-size: 22;
+
+  }
+  a:hover {
+    cursor: pointer;
+    color:rgb(57, 72, 141)
+  }
+  b {
+    font-family: Angelwish;
+    font-size: 1.5em;
+    line-height: 1em;
+  }
+
+  h3 {
+    line-height: 1em;
+  }
 
 label {
   display:flex;
   flex-direction: row;
   justify-content: space-between;
+  line-height: 100%;
+}
+
+#font-control {
+  line-height: 24px;
 }
 
 .synth {
@@ -46,38 +166,45 @@ label {
 }
 
 .octave {
-  font-size: 20px;
+  /* font-size: 20px; */
+  font-size: 36px;
   display: flex;
   flex-direction: row;
+  align-items: center;
   float:left;
   justify-content: space-between;
-  /* width: 204px; */
-  width: 125px;
-
+  width: 273px;
+  padding-top: 12px;
+  /* width: 125px; */
 }
 .updown {
   font-family: arial;
   box-shadow: 3px, 3px, 3px, 3px, teal;
   z-index: 1;
-  background: black;
-  border: 1px solid rgba(70, 131, 180, 0.062);
-  border-radius: 3px;
+  background: rgb(65, 1, 1, 0.8);
+  border: 1px solid rgb(70, 131, 180);
+  /* border: 3px solid gold; */
+  border-radius: 50%;
   text-shadow: none;
-  font-size: 18px;
-  width: 14px;
-  padding-left: 4px;
+  /* font-size: 18px; */
+  font-size: 48px;
+  /* font-size: 18px; */
+  /* width: 14px; */
+  width: 40px;
+  /* padding-left: 4px; */
+  padding-left: 18px;
 }
 
 #keyboard {
-  padding-top: 60px;
-      height: 80px;
-      display: flex;
-      justify-content: center;
-      text-shadow: none;
-      color:rgb(0, 0, 0);
-      /* top: calc(50% -100px);
-      left: calc(50% -350px); */
-    }
+  padding-top: 30px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  text-shadow: none;
+  color:rgb(0, 0, 0);
+  /* top: calc(50% -100px);
+  left: calc(50% -350px); */
+}
           
     .whiteNote {
       position: relative;
@@ -87,8 +214,9 @@ label {
       float: left;
       border: 1px solid gold;
       border-radius: 50%;
-      padding-top: 6px;
+      padding-top: 2px;
       margin: 3px;
+      box-shadow: inset 0px 0px 6px 0px  rgba(6, 3, 160, 0.541);
     }
     .blackNote {
       position: absolute;
@@ -100,6 +228,7 @@ label {
       background: rgb(57, 51, 71);
       border-radius: 70%;
       left: 70%;
+      font-size: 20px;
     }
 
     .whiteNote > div {
@@ -112,6 +241,10 @@ label {
 }
 
 
+
+
+
+
 #waveform-slider {
   height: inherit;
   width: 350px;
@@ -120,31 +253,16 @@ label {
 #adsr {
   text-align: right;
   width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%;
 }
 
 #waveform-slider-input {
   height: inherit;
   border: 1px solid black;
+  
 }
 
-
-#adsr {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
-
-canvas {
-  position: absolute;
-  background: #f8f8f8;
-  padding: 0;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-  display: block;
-  font-family: Angelwish;
-  font-size: 24px;
-  letter-spacing: 1.5px;
-  z-index: -1;
-}
 
