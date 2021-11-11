@@ -1,23 +1,21 @@
-/* @font-face {
-  font-family: AngelWish;
-  src: url('https://www.fontmirror.com/app_public/files/t/1/2020/12/Angel%20wish.otf') format("")
-} */
 @font-face {
-  font-family: 'Angelwish';
+  font-family: Angelwish;
   src: url('resources/font.otf');
   font-size: larger;
-  /* format('woff'),
-  url('https://demofont.com/wp-content/uploads/2020/09/angelwishregular-rpave.otf') format('truetype'); */
 }
+
 
 body {
   font-family: Angelwish;
+  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
   font-size: 24px;
   letter-spacing: 1.5px;
   text-shadow: 2px 2px 5px red;
   color: pink;
   margin: 0px;
   background-color: black;
+  user-select: none;
+  line-height: 1;
 }
 
 .bod {
@@ -33,7 +31,6 @@ canvas {
   margin: 0 auto;
   margin-bottom: 1rem;
   display: block;
-  font-family: Angelwish;
   font-size: 24px;
   letter-spacing: 1.5px;
   z-index: -2;
@@ -51,13 +48,11 @@ canvas {
 .modal {
   color: pink;
   text-shadow: none;
-  /* justify-content: right; */
   transition: color 0.01s;
 }
 
 .modal:hover {
   color: rgb(99, 126, 250);
-  /* color: rgb(255, 0, 128); */
   cursor: pointer;
 }
 
@@ -110,11 +105,9 @@ canvas {
     overflow: scroll;
   }
 #personal-info {
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
     text-align: center;
     word-spacing: -0.05em;
     line-height: 2;
-    /* font-size: 14px; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -131,11 +124,13 @@ canvas {
     cursor: pointer;
     color:rgb(57, 72, 141)
   }
-  b {
-    font-family: Angelwish;
+  .bold-div {
+    /* font-family: Angelwish; */
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
     font-size: 1.5em;
     line-height: 1em;
   }
+  
 
   h3 {
     line-height: 1em;
