@@ -1,11 +1,5 @@
-
-
-// if (window.navigator.platform.startsWith() === 'Mac') {
 if (window.navigator.platform.startsWith('Win')) {
-  // document.body.classList.add("mac")
   document.body.style.fontFamily = 'Segoe UI'
-  // document.b.style.color = "green"
-  
 }
 
 COUNT = 0; //reset osc count
@@ -126,10 +120,10 @@ const NOTE_FREQS = {
   "E9": 10119.68
 }
 //Keyboard
-  const keyboardKeyWhite = ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";"]
-  const keyboardKeyWhite2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";"]
-  const keyboardKeyBlack = ["w", "e", "t", "y", "u", "o", "p"];
-  const keyboardKeyBlack2 = ["w", "e", "t", "y", "u", "o", "p"];
+  const keyboardKeyWhite = ["a<br>C", "s<br>D", "d<br>E", "f<br>F", "g<br>G", "h<br>A", "j<br>B", "k<br>C", "l<br>D", ";<br>E"]
+  const keyboardKeyWhite2 = ["a<br>C", "s<br>D", "d<br>E", "f<br>F", "g<br>G", "h<br>A", "j<br>B", "k<br>C", "l<br>D", ";<br>E"]
+  const keyboardKeyBlack = ["w<br>C#", "e<br>Db", "t<br>Eb", "y<br>F#", "u<br>G#", "o<br>C#", "p<br>Eb"];
+  const keyboardKeyBlack2 = ["w<br>C#", "e<br>Db", "t<br>Eb", "y<br>F#", "u<br>G#", "o<br>C#", "p<br>Eb"];
   const notes = ["C", "D", "E", "F", "G", "A", "B", "C", "D", "E"];
   var htmlNotes = "";
   function setKeysAtOctave(octave = 2) {
@@ -917,7 +911,7 @@ const modalFAQ =
         <div id="param-documentation">
           <div><b class="bold-div">Dragon Scream</b> is a keyboard synthesizer. Play notes with the corresponding listed keyboard keys. For example, you can play a C-major chord by pressing a, d, and g. Or a C-minor chord with a, e, and g. To play higher and lower notes, change octaves up and down with x and z.</div>
           <div style="margin-bottom:6px;"><h4>Adjust parameters to change the sound:</h4></div>
-          <div class="inline-this"><b class="bold-div">Waveform</b> is the root sound of the oscillator: the positions are Sine, Triangle, Saw, and Square.</div>
+          <div><b class="bold-div">Waveform</b> is the root sound of the oscillator: the positions are Sine, Triangle, Saw, and Square.</div>
           <div><b class="bold-div">Attack</b> changes how long the note takes to go from no sound to full sound. A leftmost slider will start the sound at full volume and a rightmost position will swell the sound slowly.</div>
           <div><b class="bold-div">Decay</b> changes the time between the full volume at the end of the attack, and the volume level of the sustain.</div>
           <div><b class="bold-div">Sustain</b> is the volume level after the decay, while the notes are still being pressed or "sustained".</div>
